@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-e5afa431aa35c50995fe.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "simplechatserver",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "simplechatserver::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-simplechatserver-Debug-ee198c63b0507a780801.json",
+					"name" : "simplechatserver",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "simplechatserver_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-simplechatserver_autogen-Debug-79ddc89a58cd2fcf81d4.json",
+					"name" : "simplechatserver_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "simplechatserver_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-simplechatserver_autogen_timestamp_deps-Debug-796f54d8f8c7a9d3c868.json",
+					"name" : "simplechatserver_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/simon/Qt/Examples/Qt-6.8.3/websockets/simplechat/build/Desktop_Qt_6_8_3_Debug",
+		"source" : "/home/simon/Qt/Examples/Qt-6.8.3/websockets/simplechat"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

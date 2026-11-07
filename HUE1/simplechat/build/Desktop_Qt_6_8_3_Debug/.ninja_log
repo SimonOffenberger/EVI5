@@ -1,0 +1,13 @@
+# ninja log v5
+0	134	1742369127000000000	simplechatserver_autogen/timestamp	fd268acc9b54f996
+0	134	1742369127000000000	simplechatserver_autogen/mocs_compilation.cpp	fd268acc9b54f996
+0	134	1742369127000000000	/home/simon/Qt/Examples/Qt-6.8.3/websockets/simplechat/build/Desktop_Qt_6_8_3_Debug/simplechatserver_autogen/timestamp	fd268acc9b54f996
+0	134	1742369127000000000	/home/simon/Qt/Examples/Qt-6.8.3/websockets/simplechat/build/Desktop_Qt_6_8_3_Debug/simplechatserver_autogen/mocs_compilation.cpp	fd268acc9b54f996
+134	789	1793818749588717836	CMakeFiles/simplechatserver.dir/simplechatserver_autogen/mocs_compilation.cpp.o	4a85d564917066bc
+134	814	1793818749614720119	CMakeFiles/simplechatserver.dir/main.cpp.o	517d5909d8a2165
+134	2123	1793818750921834889	CMakeFiles/simplechatserver.dir/chatserver.cpp.o	d479b77f1714c141
+2123	2232	1793818751030844460	simplechatserver	a530231f3f7602f1
+2	10	1742369127000000000	simplechatserver_autogen/timestamp	fd268acc9b54f996
+2	10	1742369127000000000	simplechatserver_autogen/mocs_compilation.cpp	fd268acc9b54f996
+2	10	1742369127000000000	/home/simon/Qt/Examples/Qt-6.8.3/websockets/simplechat/build/Desktop_Qt_6_8_3_Debug/simplechatserver_autogen/timestamp	fd268acc9b54f996
+2	10	1742369127000000000	/home/simon/Qt/Examples/Qt-6.8.3/websockets/simplechat/build/Desktop_Qt_6_8_3_Debug/simplechatserver_autogen/mocs_compilation.cpp	fd268acc9b54f996

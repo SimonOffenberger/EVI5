@@ -1,0 +1,42 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Qt: Configure editor",
+      "type": "process",
+      "command": "cmake",
+      "args": ["--preset", "vscode"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Qt: Prepare editor",
+      "type": "process",
+      "command": "cmake",
+      "args": ["--build", "--preset", "vscode-autogen"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "dependsOn": "Qt: Configure editor",
+      "problemMatcher": "$gcc",
+      "runOptions": { "runOn": "folderOpen" }
+    },
+    {
+      "label": "Qt: Build desktop",
+      "type": "process",
+      "command": "cmake",
+      "args": ["--build", "--preset", "vscode"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "dependsOn": "Qt: Prepare editor",
+      "problemMatcher": "$gcc",
+      "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "Qt: clang-tidy current file",
+      "type": "process",
+      "command": "/usr/bin/clang-tidy",
+      "args": ["-p", "${workspaceFolder}/build/vscode", "${file}"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "dependsOn": "Qt: Prepare editor",
+      "problemMatcher": "$gcc"
+    }
+  ]
+}
