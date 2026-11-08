@@ -9,6 +9,7 @@
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include "chatclient.h"
+#include "emojireplacer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -29,8 +30,15 @@ public slots:
     void btnDisconnectClicked();
     void btnSendClicked();
 
+private slots:
+    void onConnected();
+    void onReconnecting();
+    void onClosed();
+    void onConnectionError(const QString &message);
+    void onMsgRcv(QString msg);
+
 private:
-    enum class ConnectionState { Disconnected, Connecting, Connected, Error };
+    enum class ConnectionState { Disconnected, Connected, Error, Reconnecting };
     void updateConnectionState(ConnectionState state);
     ConnectionState connectionState = ConnectionState::Disconnected;
 

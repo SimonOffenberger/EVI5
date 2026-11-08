@@ -58,34 +58,48 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(connectButton, SIGNAL(clicked()), this, SLOT(btnConnectClicked()));
     connect(disconnectButton, SIGNAL(clicked()), this, SLOT(btnDisconnectClicked()));
     connect(sendButton, SIGNAL(clicked()), this, SLOT(btnSendClicked()));
-    connect(msgToSend, &QLineEdit::returnPressed, this, &MainWindow::btnSendClicked);
+    connect(msgToSend, SIGNAL(returnPressed()), this, SLOT(btnSendClicked()));
 
-    connect(&chatClient, SIGNAL(messageReceived(QString)), chatHistory,
-            SLOT(appendPlainText(QString)));
+    connect(&chatClient, SIGNAL(messageReceived(QString)), this, SLOT(onMsgRcv(QString)));
 
-    connect(&chatClient, &Chatclient::connected, this,
-            [this] { updateConnectionState(ConnectionState::Connected); });
-    connect(&chatClient, &Chatclient::closed, this, [this] {
-        // A socket error may be followed by closed(); keep the error visible.
-        if (connectionState != ConnectionState::Error)
-            updateConnectionState(ConnectionState::Disconnected);
-    });
-    connect(&chatClient, &Chatclient::connectionError, this, [this](const QString &message) {
-        updateConnectionState(ConnectionState::Error);
-        connectButton->setToolTip(message);
-    });
+    connect(&chatClient, SIGNAL(connected()), this, SLOT(onConnected()));
+    connect(&chatClient, SIGNAL(closed()), this, SLOT(onClosed()));
+    connect(&chatClient, SIGNAL(connectionError(QString)), this, SLOT(onConnectionError(QString)));
+
+    connect(&chatClient, SIGNAL(reconnecting()), this, SLOT(onReconnecting()));
 
     updateConnectionState(ConnectionState::Disconnected);
 }
 
+void MainWindow::onConnected()
+{
+    updateConnectionState(ConnectionState::Connected);
+}
+
+void MainWindow::onClosed()
+{
+    updateConnectionState(ConnectionState::Disconnected);
+}
+
+void MainWindow::onReconnecting()
+{
+    updateConnectionState(ConnectionState::Reconnecting);
+}
+
+void MainWindow::onConnectionError(const QString &message)
+{
+    if (connectionState != ConnectionState::Reconnecting)
+        updateConnectionState(ConnectionState::Error);
+    connectButton->setToolTip(message);
+}
+
 void MainWindow::btnConnectClicked()
 {
-    QString address = serverTextBox->text().trimmed();
-    if (!address.contains("://"))
-        address.prepend("ws://");
+    QString address = serverTextBox->text();
+    address.prepend("ws://");
 
-    updateConnectionState(ConnectionState::Connecting);
     chatClient.connectToServer(QUrl(address));
+    chatHistory->clear();
 }
 
 void MainWindow::btnDisconnectClicked()
@@ -98,16 +112,16 @@ void MainWindow::updateConnectionState(ConnectionState state)
 {
     connectionState = state;
     const bool connected = state == ConnectionState::Connected;
-    const bool connecting = state == ConnectionState::Connecting;
+    const bool active = connected || state == ConnectionState::Reconnecting;
 
     userName->setEnabled(connected);
     userNameLabel->setEnabled(connected);
     msgToSend->setEnabled(connected);
     sendButton->setEnabled(connected);
     chatHistory->setEnabled(connected);
-    disconnectButton->setEnabled(connected);
-    serverTextBox->setEnabled(!connected && !connecting);
-    connectButton->setEnabled(!connected && !connecting);
+    disconnectButton->setEnabled(active);
+    serverTextBox->setEnabled(!active);
+    connectButton->setEnabled(!active);
     connectButton->setToolTip(QString());
 
     if (connected) {
@@ -116,18 +130,32 @@ void MainWindow::updateConnectionState(ConnectionState state)
     } else if (state == ConnectionState::Error) {
         connectButton->setText(tr("erneut verbinden"));
         connectButton->setStyleSheet("background-color: #c62828; color: white;");
+    } else if (state == ConnectionState::Reconnecting) {
+        connectButton->setText(tr("reconnect"));
+        connectButton->setStyleSheet("background-color: #e4e120; color: black;");
+        connectButton->setEnabled(false);
     } else {
-        connectButton->setText(connecting ? tr("verbinde …") : tr("verbinden"));
+        connectButton->setText("verbinden");
         connectButton->setStyleSheet(QString());
     }
 }
 
 void MainWindow::btnSendClicked()
 {
-    QString msg(userName->text() + ": " + msgToSend->text());
+    QString replacedMsg(msgToSend->text());
+
+    EmojiReplacer::replaceToEmojis(replacedMsg);
+
+    QString msg(userName->text() + ": " + replacedMsg);
     chatClient.sendMessage(msg);
     chatHistory->appendPlainText(msg);
     msgToSend->clear();
+}
+
+void MainWindow::onMsgRcv(QString msg)
+{
+    EmojiReplacer::replaceToEmojis(msg);
+    chatHistory->appendPlainText(msg);
 }
 
 MainWindow::~MainWindow()
