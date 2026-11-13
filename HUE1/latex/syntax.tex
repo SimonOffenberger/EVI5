@@ -1,0 +1,37 @@
+\definecolor{codeBlue}{HTML}{174EA6}
+\definecolor{codeGreen}{HTML}{336633}
+\definecolor{codeRed}{HTML}{9C2C28}
+\definecolor{codeBackground}{HTML}{F6F8FA}
+\lstdefinestyle{source}{
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{codeBlue}\bfseries,
+  commentstyle=\color{codeGreen}\itshape,
+  stringstyle=\color{codeRed},
+  backgroundcolor=\color{codeBackground},
+  numbers=left, numberstyle=\tiny\color{gray}, numbersep=8pt,
+  frame=single, rulecolor=\color{gray!35},
+  xleftmargin=2em, framexleftmargin=0.5em,
+  breaklines=true, breakatwhitespace=false,
+  columns=fullflexible, keepspaces=true,
+  showstringspaces=false, tabsize=4,
+  captionpos=t,
+  % pdfLaTeX: Umlaute unterstützen; Emoji-Literale als Unicode-Codepunkte zeigen.
+  literate={ä}{{\"a}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+           {Ä}{{\"A}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1 {ß}{{\ss}}1
+           {🙂}{{[U+1F642]}}9 {🙁}{{[U+1F641]}}9
+           {😉}{{[U+1F609]}}9 {😃}{{[U+1F603]}}9
+}
+\lstdefinestyle{cpp}{style=source,language=C++,
+  morekeywords={signals,slots,emit,Q_OBJECT,QString,QObject,QWidget,
+    QMainWindow,QApplication,QWebSocket,QTimer,QUrl,QVBoxLayout,QHBoxLayout,
+    QLineEdit,QPushButton,QLabel,QPlainTextEdit,QMap}}
+\lstdefinelanguage{CMake}{
+  sensitive=true,
+  morekeywords={cmake_minimum_required,project,set,find_package,if,else,endif,
+    qt_add_executable,add_library,add_executable,target_link_libraries,
+    set_target_properties,include,install,qt_finalize_executable},
+  morecomment=[l]{\#}, morestring=[b]"
+}
+\lstset{style=source}
+\renewcommand{\lstlistingname}{Quellcode}
+\renewcommand{\lstlistlistingname}{Quellcodeverzeichnis}

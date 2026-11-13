@@ -1,0 +1,109 @@
+\section{Aufgabenstellung und Ziel}
+Ziel ist ein Simplechat-Client mit Qt Widgets für einen Raspberry Pi mit
+einer Bildschirmauflösung von 800\,\(\times\)\,480 Pixeln. Die Oberfläche
+soll durch im C++-Code angelegte Layouts flexibel auf unterschiedliche
+Fenstergrößen reagieren. Die Kommunikation erfolgt über WebSockets mit
+dem Simplechat-Server. Zusätzlich werden zwei eigene Ideen umgesetzt.
+
+\section{Lösungsidee und Aufbau}
+\subsection{Layout und Handskizze}
+Das zentrale Widget verwendet ein \texttt{QVBoxLayout}. Oben befinden sich
+zwei horizontale Zeilen: Serveradresse mit den Schaltflächen zum Verbinden
+und Trennen sowie die Eingabe des Benutzernamens. Darunter liegt der
+schreibgeschützte Chatverlauf als \texttt{QPlainTextEdit}. Eine weitere
+Zeile enthält das Nachrichteneingabefeld und die Senden-Schaltfläche.
+
+\bild{handskizze.png}{Handskizze der Oberfläche mit Widgets und QLayouts.}{fig:skizze}
+
+Für das Layout in der Skizze wurde als Zentrales Layout Element ein \texttt{QVBoxLayout} gewählt. 
+In diesem Vertikalen Layout befinden sich drei horizontale Layouts, die jeweils die Widgets der Zeilen enthalten.
+In der ersten Zeile befinden sich die Widgets für die Serveradresse und die Buttons zum Verbinden und Trennen.
+Wichtig war mir persönlich, hier dass am Unteren Rand die Zeile mit der Nachrichteneingabe und dem Senden Button ist.
+Denn dieses Layout ist für die meisten Menschen vertraut, da es auch in den meisten Chat Programmen so umgesetzt ist.
+
+\clearpage
+
+\subsection{Klassen und Kommunikation}
+\begin{description}
+  \item[\texttt{MainWindow}] Erstellt die Chat-Oberfläche im C++-Code,
+    verbindet die Bedienelemente mit Slots und stellt den Verbindungszustand dar.
+  \item[\texttt{Chatclient}] Kapselt den WebSocket, sendet und empfängt
+    Nachrichten und steuert die automatische Wiederverbindung.
+  \item[\texttt{EmojiReplacer}] Ersetzt definierte Text-Emoticons durch
+    Unicode-Emojis. Die Ersetzung erfolgt beim Senden und Empfangen.
+  \item[\texttt{main.cpp}] Erstellt die Anwendung, setzt die Schrift per
+    Stylesheet auf 16\,pt und öffnet das Hauptfenster mit \texttt{showFullScreen()}.
+\end{description}
+Signale und Slots verbinden Netzwerklogik und Oberfläche. Der Client meldet
+empfangene Nachrichten und Zustandsänderungen an das Hauptfenster.
+Beim Senden wird der Benutzername vor die Nachricht gesetzt; die Nachricht
+wird außerdem lokal an den Verlauf angehängt.
+
+\subsection{Darstellung und Bedienung}
+Bei aktiver Verbindung erscheint die Verbinden-Schaltfläche grün und zeigt
+\glqq verbunden\grqq. Im getrennten Zustand wird ihr Stylesheet
+zurückgesetzt. Während der Wiederverbindung ist die Anzeige gelb.
+Die Nachrichteneingabe und das Senden sind nur bei aktiver Verbindung
+freigeschaltet. Nachrichten können auch mit der Eingabetaste gesendet werden.
+
+\newpage
+
+\section{Erweiterungen aus Teil 2}
+Es wurden folgende zwei Ideen aus dem Ideenkatalog umgesetzt. 
+
+\begin{itemize}
+  \item Automatische Wiederverbindung bei Verbindungsabbrüchen
+  \item Emoji-Ersetzung für die Eingaben \texttt{:)}, \texttt{:(},
+    \texttt{;)} und \texttt{:D}
+\end{itemize}
+
+\subsection{Idee 1: Automatische Wiederverbindung}
+\textbf{Kategorie laut Ideenkatalog:} Robustheit
+
+\textbf{Umsetzung:} Bei Verbindungsfehlern oder Verbindungsabbrüchen plant
+\texttt{Chatclient} über einen einmalig auslösenden \texttt{QTimer} einen
+neuen Verbindungsversuch nach 500\,ms. Die zuletzt verwendete URL bleibt
+gespeichert. Weitere Fehlschläge können erneut einen Versuch auslösen.
+Manuelles Trennen stoppt den Timer und deaktiviert weitere Versuche.
+
+\textbf{Begründung:} Eine vorübergehende Netzwerkunterbrechung erfordert
+dadurch keinen erneuten manuellen Verbindungsaufbau. Die gelbe Zustandsanzeige
+macht den Wiederverbindungsversuch auf dem Embedded-Gerät sichtbar.
+
+\bild{idee-reconnect.png}{Desktop: Wiederverbindungsversuch nach dem Stoppen des lokalen Servers.}{fig:reconnect}
+\newpage
+\subsection{Idee 2: Emoji-Ersetzung}
+\textbf{Kategorie laut Ideenkatalog:} Darstellung
+
+\textbf{Umsetzung:} \texttt{EmojiReplacer} ersetzt die Eingaben
+\texttt{:)}, \texttt{:(}, \texttt{;)} und \texttt{:D} anhand einer
+\texttt{QMap}. Die Ersetzung erfolgt sowohl vor dem Senden als auch beim
+Anzeigen empfangener Nachrichten.
+
+\textbf{Begründung:} Häufig verwendete Emojis lassen sich über kurze
+Tastatureingaben erzeugen. Eine zusätzliche Auswahloberfläche beansprucht
+dadurch keinen Platz auf dem kleinen Bildschirm.
+
+\bild{idee-emojis.png}{Desktop: Alle vier Emoticons werden beim Senden und Empfangen ersetzt. Die Eingabezeile zeigt die ursprünglichen Kurzformen.}{fig:emojis}
+\newpage
+\section{Ausführung und Nachweise}
+
+\subsection{Ausführung auf dem Raspberry Pi}
+\todo{Build, Übertragung und Start kurz erläutern. Lesbarkeit und Bedienung
+auf dem echten Gerät beschreiben. Ein Foto mit dem Smartphone ist zulässig.}ö
+\bild{raspberry-pi.png}{Ausgeführter Chat-Client auf dem Raspberry Pi.}{fig:rpi}
+
+\subsection{Flexible Fenstergrößen am Desktop}
+Für die Desktop-Aufnahmen wurde das laufende Fenster durch eine temporäre
+Qt-Teststeuerung mit \texttt{showNormal()} in den Fenstermodus versetzt und
+auf 800 x 480 beziehungsweise 1200 x 720 Pixel skaliert. Die Projektquelldateien
+und der reguläre Vollbildstart wurden nicht verändert. Die Aufnahmen zeigen
+den direkt mit \texttt{QWidget::grab()} erfassten Fensterinhalt ohne Fensterrahmen.
+Bei größerem Fenster wachsen insbesondere der Chatverlauf und die
+Eingabefelder; die Anordnung der Bedienelemente bleibt erhalten.
+Ein zweiter WebSocket-Testclient bestätigte den Nachrichtenaustausch über
+die vorhandene Simplechat-Serverimplementierung auf dem separaten Testport 18473.
+\bild{desktop-klein.png}{Desktop-Ausführung mit 800 x 480 Pixeln Fensterinhalt.}{fig:desktop-klein}
+\bild{desktop-gross.png}{Desktop-Ausführung mit 1200 x 720 Pixeln Fensterinhalt.}{fig:desktop-gross}
+
+

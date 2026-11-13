@@ -1,0 +1,62 @@
+% Aus dem Ordner latex kompilieren: latexmk -pdf main.tex
+\documentclass[11pt,a4paper,parskip=half]{scrartcl}
+\pdfminorversion=7
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{lmodern}
+\usepackage[margin=25mm]{geometry}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{booktabs,tabularx}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\setlength{\parfillskip}{0pt plus 1fil}
+\input{syntax}
+
+% Hier persönliche Angaben ergänzen.
+\newcommand{\Autor}{Simon Offenberger}
+\newcommand{\Matrikelnummer}{S2410306027}
+\newcommand{\Studiengang}{HSD}
+\newcommand{\Abgabedatum}{\today}
+\newcommand{\Quellpfad}{../RPI-ChatClient/RPI-ChatClient}
+\newcommand{\todo}[1]{\textcolor{red!65!black}{\textbf{[Ergänzen: #1]}}}
+
+% Fehlende Bilder erscheinen als beschriftete Platzhalter.
+\newcommand{\bild}[3]{%
+  \begin{figure}[htbp]
+    \centering
+    \IfFileExists{bilder/#1}{%
+      \includegraphics[width=0.9\linewidth,height=0.38\textheight,keepaspectratio]{bilder/#1}%
+    }{%
+      \fbox{\parbox[c][42mm][c]{0.85\linewidth}{\centering
+        Bild hier ergänzen\\[2mm]\texttt{\detokenize{bilder/#1}}}}%
+    }
+    \caption{#2}\label{#3}
+  \end{figure}
+}
+
+\begin{document}
+% Beide Seiten der Angabe stehen vor der Ausarbeitung.
+\hypersetup{pageanchor=false}
+\includepdf[pages=-,pagecommand={}]{../01_EVI5_Uebung_Simplechat_2026-2.pdf}
+\setcounter{page}{1}
+\hypersetup{pageanchor=true}
+\begin{center}
+  {\LARGE\bfseries Übung 1: Simplechat Client\par}
+  \medskip
+  {\large Embedded Visualization with Qt\par}
+  \bigskip
+  \Autor\quad |\quad \Matrikelnummer\\
+  \Studiengang\\
+  \Abgabedatum
+\end{center}
+\tableofcontents
+\clearpage
+\input{loesung}
+\clearpage
+\appendix
+\input{quellcode}
+\end{document}
