@@ -1,0 +1,6 @@
+CompileFlags:
+  CompilationDatabase: build/vscode
+Diagnostics:
+  ClangTidy:
+    FastCheckFilter: None
+  UnusedIncludes: None

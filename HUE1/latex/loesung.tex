@@ -15,11 +15,11 @@ Zeile enthält das Nachrichteneingabefeld und die Senden-Schaltfläche.
 
 \bild{handskizze.png}{Handskizze der Oberfläche mit Widgets und QLayouts.}{fig:skizze}
 
-Für das Layout in der Skizze wurde als Zentrales Layout Element ein \texttt{QVBoxLayout} gewählt. 
-In diesem Vertikalen Layout befinden sich drei horizontale Layouts, die jeweils die Widgets der Zeilen enthalten.
+Für das Layout in der Skizze wurde als zentrales Layoutelement ein \texttt{QVBoxLayout} gewählt. 
+In diesem vertikalen Layout befinden sich drei horizontale Layouts, die jeweils die Widgets der Zeilen enthalten.
 In der ersten Zeile befinden sich die Widgets für die Serveradresse und die Buttons zum Verbinden und Trennen.
-Wichtig war mir persönlich, hier dass am Unteren Rand die Zeile mit der Nachrichteneingabe und dem Senden Button ist.
-Denn dieses Layout ist für die meisten Menschen vertraut, da es auch in den meisten Chat Programmen so umgesetzt ist.
+Wichtig war mir persönlich, dass hier am unteren Rand die Zeile mit der Nachrichteneingabe und der Senden-Schaltfläche ist.
+Denn dieses Layout ist für die meisten Menschen vertraut, da es auch in den meisten Chatprogrammen so umgesetzt ist.
 
 \clearpage
 
@@ -36,7 +36,7 @@ Denn dieses Layout ist für die meisten Menschen vertraut, da es auch in den mei
 \end{description}
 Signale und Slots verbinden Netzwerklogik und Oberfläche. Der Client meldet
 empfangene Nachrichten und Zustandsänderungen an das Hauptfenster.
-Beim Senden wird der Benutzername vor die Nachricht gesetzt; die Nachricht
+Beim Senden wird der Benutzername vor die Nachricht gesetzt, die Nachricht
 wird außerdem lokal an den Verlauf angehängt.
 
 \subsection{Darstellung und Bedienung}
@@ -89,20 +89,38 @@ dadurch keinen Platz auf dem kleinen Bildschirm.
 \section{Ausführung und Nachweise}
 
 \subsection{Ausführung auf dem Raspberry Pi}
-\todo{Build, Übertragung und Start kurz erläutern. Lesbarkeit und Bedienung
-auf dem echten Gerät beschreiben. Ein Foto mit dem Smartphone ist zulässig.}ö
-\bild{raspberry-pi.png}{Ausgeführter Chat-Client auf dem Raspberry Pi.}{fig:rpi}
+
+Nun wurde der Chat-Client auf dem Raspberry Pi ausgeführt.
+Hier ist zu erkennen, dass die Oberfläche auf dem kleinen Bildschirm gut lesbar ist und die Bedienung mit den Fingern gut funktioniert.
+Hierbei ist es wichtig, dass die Buttons und Eingabefelder groß genug sind, um sie mit den Fingern gut bedienen zu können.
+Außerdem soll das Textfeld für den Chatverlauf groß genug sein, um die Nachrichten gut lesen zu können.
+
+\bild{normaleVerbindung_PI.jpeg}{Ausgeführter Chat-Client auf dem Raspberry Pi.}{fig:rpi}
+
+\bild{reconnect.jpeg}{Reconnect - Wiederverbindungsversuch am Raspberry Pi.}{fig:rpi}
+
+Für die Emoji-Ersetzung auf dem Raspberry Pi musste eine Schriftart mit Emoji-Unterstützung installiert werden.
+Die Schriftart \texttt{Noto Color Emoji} wurde über scp auf den Raspberry Pi kopiert und anschließend eingebunden.
+
+Hier wurde die Schriftart mit folgenden Befehlen installiert:
+\begin{lstlisting}[language=bash]
+mkdir -p /usr/share/fonts/truetype/noto
+
+cp /tmp/NotoColorEmoji.ttf \
+   /usr/share/fonts/truetype/noto/
+
+chmod 644 /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf
+\end{lstlisting}
+
+\bild{Emojies.jpeg}{Emoji-Ersetzung auf dem Raspberry Pi.}{fig:rpi}
+
 
 \subsection{Flexible Fenstergrößen am Desktop}
-Für die Desktop-Aufnahmen wurde das laufende Fenster durch eine temporäre
-Qt-Teststeuerung mit \texttt{showNormal()} in den Fenstermodus versetzt und
-auf 800 x 480 beziehungsweise 1200 x 720 Pixel skaliert. Die Projektquelldateien
-und der reguläre Vollbildstart wurden nicht verändert. Die Aufnahmen zeigen
-den direkt mit \texttt{QWidget::grab()} erfassten Fensterinhalt ohne Fensterrahmen.
+Für die Desktop-Aufnahmen wurde das laufende Fenster mittels mit \texttt{show()} in den Fenstermodus versetzt und
+auf 800 x 480 beziehungsweise ca. 1200 x 720 Pixel skaliert.
 Bei größerem Fenster wachsen insbesondere der Chatverlauf und die
-Eingabefelder; die Anordnung der Bedienelemente bleibt erhalten.
-Ein zweiter WebSocket-Testclient bestätigte den Nachrichtenaustausch über
-die vorhandene Simplechat-Serverimplementierung auf dem separaten Testport 18473.
+Eingabefelder, die Anordnung der Bedienelemente bleibt erhalten.
+Ein zweiter WebSocket-Testclient bestätigte den Nachrichtenaustausch.
 \bild{desktop-klein.png}{Desktop-Ausführung mit 800 x 480 Pixeln Fensterinhalt.}{fig:desktop-klein}
 \bild{desktop-gross.png}{Desktop-Ausführung mit 1200 x 720 Pixeln Fensterinhalt.}{fig:desktop-gross}
 

@@ -23,10 +23,10 @@
 \newcommand{\Abgabedatum}{\today}
 \newcommand{\Quellpfad}{../RPI-ChatClient/RPI-ChatClient}
 \newcommand{\todo}[1]{\textcolor{red!65!black}{\textbf{[Ergänzen: #1]}}}
-
+\usepackage{float}
 % Fehlende Bilder erscheinen als beschriftete Platzhalter.
 \newcommand{\bild}[3]{%
-  \begin{figure}[htbp]
+  \begin{figure}[H]
     \centering
     \IfFileExists{bilder/#1}{%
       \includegraphics[width=0.9\linewidth,height=0.38\textheight,keepaspectratio]{bilder/#1}%

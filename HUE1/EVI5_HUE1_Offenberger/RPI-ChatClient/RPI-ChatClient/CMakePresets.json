@@ -1,0 +1,26 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": { "major": 3, "minor": 21, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "vscode",
+      "displayName": "VS Code / Qt 6.8.3 Desktop",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/vscode",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_COMPILER": "/usr/bin/g++",
+        "CMAKE_PREFIX_PATH": "$env{HOME}/Qt/6.8.3/gcc_64",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": true
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "vscode", "configurePreset": "vscode" },
+    {
+      "name": "vscode-autogen",
+      "configurePreset": "vscode",
+      "targets": ["RPI-ChatClient_autogen"]
+    }
+  ]
+}

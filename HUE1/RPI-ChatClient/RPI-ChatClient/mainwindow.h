@@ -17,28 +17,41 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
+/** @brief Chat interface for managing connections and displaying messages. */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
+    /** @brief Creates the interface and connects its signals and slots. */
     explicit MainWindow(QWidget *parent = nullptr);
+    /** @brief Releases the UI helper object. */
     ~MainWindow() override;
 
 public slots:
+    /** @brief Connects to the entered address and clears the chat history. */
     void btnConnectClicked();
+    /** @brief Disconnects and updates the interface. */
     void btnDisconnectClicked();
+    /** @brief Sends and displays the text with emojis and the username. */
     void btnSendClicked();
 
 private slots:
+    /** @brief Updates the interface after a successful connection. */
     void onConnected();
+    /** @brief Displays the ongoing reconnection attempt. */
     void onReconnecting();
+    /** @brief Sets the interface to the disconnected state. */
     void onClosed();
+    /** @brief Displays a connection error as a tooltip. */
     void onConnectionError(const QString &message);
+    /** @brief Replaces emoticons and displays the received message. */
     void onMsgRcv(QString msg);
 
 private:
+    /** @brief Possible connection states of the interface. */
     enum class ConnectionState { Disconnected, Connected, Error, Reconnecting };
+    /** @brief Updates controls and the connection indicator for the given state. */
     void updateConnectionState(ConnectionState state);
     ConnectionState connectionState = ConnectionState::Disconnected;
 

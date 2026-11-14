@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -43,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     chatHistory->setReadOnly(true);
     mainBoxLayout->addWidget(chatHistory);
 
-    /* Text Message and User Name */
+    /* Message input and send button */
     bottomSendLayout = new QHBoxLayout;
     msgToSend = new QLineEdit;
     msgToSend->setReadOnly(false);
@@ -88,13 +89,15 @@ void MainWindow::onReconnecting()
 
 void MainWindow::onConnectionError(const QString &message)
 {
+    qDebug() << "[MainWindow] Connection error:" << message;
+    // Keep the reconnect indicator visible while automatic retries are active.
     if (connectionState != ConnectionState::Reconnecting)
         updateConnectionState(ConnectionState::Error);
-    connectButton->setToolTip(message);
 }
 
 void MainWindow::btnConnectClicked()
 {
+    qDebug() << "[MainWindow] Connect button clicked";
     QString address = serverTextBox->text();
     address.prepend("ws://");
 
@@ -104,14 +107,17 @@ void MainWindow::btnConnectClicked()
 
 void MainWindow::btnDisconnectClicked()
 {
+    qDebug() << "[MainWindow] Disconnect button clicked";
     updateConnectionState(ConnectionState::Disconnected);
     chatClient.disconnectFromServer();
 }
 
 void MainWindow::updateConnectionState(ConnectionState state)
 {
+    // update private member
     connectionState = state;
     const bool connected = state == ConnectionState::Connected;
+    // Allow cancellation during reconnects, but keep the server address locked.
     const bool active = connected || state == ConnectionState::Reconnecting;
 
     userName->setEnabled(connected);
@@ -122,19 +128,22 @@ void MainWindow::updateConnectionState(ConnectionState state)
     disconnectButton->setEnabled(active);
     serverTextBox->setEnabled(!active);
     connectButton->setEnabled(!active);
-    connectButton->setToolTip(QString());
 
     if (connected) {
+        qDebug() << "[MainWindow] Connection state: connected";
         connectButton->setText(tr("verbunden"));
         connectButton->setStyleSheet("background-color: #238636; color: white;");
     } else if (state == ConnectionState::Error) {
+        qDebug() << "[MainWindow] Connection state: error";
         connectButton->setText(tr("erneut verbinden"));
         connectButton->setStyleSheet("background-color: #c62828; color: white;");
     } else if (state == ConnectionState::Reconnecting) {
+        qDebug() << "[MainWindow] Connection state: reconnecting";
         connectButton->setText(tr("reconnect"));
         connectButton->setStyleSheet("background-color: #e4e120; color: black;");
         connectButton->setEnabled(false);
     } else {
+        qDebug() << "[MainWindow] Connection state: disconnected";
         connectButton->setText("verbinden");
         connectButton->setStyleSheet(QString());
     }
@@ -142,18 +151,22 @@ void MainWindow::updateConnectionState(ConnectionState state)
 
 void MainWindow::btnSendClicked()
 {
+    qDebug() << "[MainWindow] Sending message with" << msgToSend->text().size() << "characters";
     QString replacedMsg(msgToSend->text());
 
+    // Convert only the message body so emoticons in the username stay unchanged.
     EmojiReplacer::replaceToEmojis(replacedMsg);
 
     QString msg(userName->text() + ": " + replacedMsg);
     chatClient.sendMessage(msg);
+    // Show the outgoing message immediately without waiting for a server echo.
     chatHistory->appendPlainText(msg);
     msgToSend->clear();
 }
 
 void MainWindow::onMsgRcv(QString msg)
 {
+    qDebug() << "[MainWindow] Displaying received message with" << msg.size() << "characters";
     EmojiReplacer::replaceToEmojis(msg);
     chatHistory->appendPlainText(msg);
 }

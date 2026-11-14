@@ -1,0 +1,27 @@
+{
+  "clangd.path": "/usr/bin/clangd",
+  "clangd.arguments": [
+    "--background-index",
+    "--clang-tidy",
+    "--completion-style=detailed",
+    "--header-insertion=never",
+    "--query-driver=/usr/bin/g++,/bin/g++"
+  ],
+  "C_Cpp.intelliSenseEngine": "disabled",
+  "C_Cpp.errorSquiggles": "disabled",
+  "C_Cpp.codeAnalysis.runAutomatically": false,
+  "clang-tidy.lintOnSave": false,
+  "clang-tidy.fixOnSave": false,
+  "clang-tidy.blacklist": [".*"],
+  "cmake.useCMakePresets": "always",
+  "cmake.configureOnOpen": false,
+  "[cpp]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false
+  },
+  "files.watcherExclude": { "**/build/**": true },
+  "search.exclude": { "**/build/**": true }
+}

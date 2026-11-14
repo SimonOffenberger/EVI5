@@ -1,0 +1,44 @@
+# Approximation of https://wiki.qt.io/Qt_Coding_Style for clang-format 18.
+BasedOnStyle: LLVM
+Language: Cpp
+Standard: c++17
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+AccessModifierOffset: -4
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterStruct: true
+  AfterEnum: false
+  AfterFunction: true
+  AfterNamespace: false
+  AfterControlStatement: Never
+  BeforeElse: false
+  BeforeCatch: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+IndentCaseLabels: false
+NamespaceIndentation: None
+PointerAlignment: Right
+ReferenceAlignment: Pointer
+DerivePointerAlignment: false
+BreakBeforeBinaryOperators: All
+SpaceBeforeParens: ControlStatements
+SortIncludes: Never
+MaxEmptyLinesToKeep: 1
+StatementMacros:
+  - Q_OBJECT
+  - Q_GADGET
+  - Q_PROPERTY
+  - Q_DECLARE_PUBLIC
+  - Q_DECLARE_PRIVATE
+  - Q_DISABLE_COPY
+  - Q_DISABLE_COPY_MOVE
+  - Q_ENUM
+  - Q_FLAG
+  - Q_DECLARE_METATYPE
+  - QT_BEGIN_NAMESPACE
+  - QT_END_NAMESPACE
